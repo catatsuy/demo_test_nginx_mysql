@@ -4,12 +4,15 @@ ENV APP_ROOT /usr/src/app
 
 WORKDIR $APP_ROOT
 
+ARG nginx_build_version="0.10.1"
+ARG openresty_version="1.11.2.4"
+
 RUN apt update && apt install -y wget build-essential cpanminus
 
-RUN wget https://github.com/cubicdaiya/nginx-build/releases/download/v0.10.0/nginx-build-linux-amd64-0.10.0.tar.gz && \
-  tar xvf nginx-build-linux-amd64-0.10.0.tar.gz
+RUN wget https://github.com/cubicdaiya/nginx-build/releases/download/v${nginx_build_version}/nginx-build-linux-amd64-${nginx_build_version}.tar.gz && \
+  tar xvf nginx-build-linux-amd64-${nginx_build_version}.tar.gz
 
-RUN ./nginx-build -d work -openresty -pcre -openssl -zlib && cd work/openresty/1.11.2.3/openresty-1.11.2.3 && make install
+RUN ./nginx-build -d work -openresty -pcre -openssl -zlib && cd work/openresty/${openresty_version}/openresty-${openresty_version} && make install
 
 ENV TEST_NGINX_BINARY /usr/local/openresty/bin/openresty
 
